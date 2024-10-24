@@ -88,40 +88,45 @@
 # IMPLEMENT
 # 4. Translate the pseudocode into Python and share your final answer:
 
+def merge(left, right):
+    result = []  # List to store the merged result
+    i = j = 0  # Pointers to iterate over left and right input arrays
 
-class Node:
-    def __init__(self, value, next=None):
-        self.value = value
-        self.next = next
+    # Compare elements from left and right halves of the list and add them to the
+    # result list in the correct order
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            result.append(left[i])
+            i += 1
+        else:
+            result.append(right[j])
+            j += 1
+    # Add any remaining elements from the left half to the result list
+    while i < len(left):
+        result.append(left[i])
+        i += 1
+
+    # Add any remaining elements from the right half to the result list
+    while j < len(right):
+        result.append(right[j])
+        j += 1
+
+    return result
 
 
-def print_list(node):
-    current = node
-    while current:
-        print(current.value, end=" -> " if current.next else "")
-        current = current.next
-    print()
-
-
-def move_to_head(head, node):
- tmp = node.next
- node.next = tmp.next
- tmp.next = head
- return tmp
-
-def partition(head, val):
- cur = head
- while cur.next:
-  if cur.next.value < val:
-   head = move_to_head(head, cur)
-  cur = cur.next
- return head
+def merge_sort(lst):
+    if len(lst) < 2:
+        return lst
+    mid = len(lst) // 2
+    left = merge_sort(lst[:mid])
+    right = merge_sort(lst[mid:])
+    return merge(left, right)
 
 
 def main():
-    head = Node(1, Node(3, Node(1, Node(4))))
-    print_list(partition(head, 3))
-
+    lst = [5,3,4,2,1]
+    print(merge_sort(lst))
 
 
 if __name__ == "__main__":
