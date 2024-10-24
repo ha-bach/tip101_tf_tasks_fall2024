@@ -31,6 +31,12 @@ def is_nested(paren_s):
     return paren_s[0] == "(" and paren_s[-1] == ")" and is_nested(paren_s[1:-1])
 
 
+# time complexity: O(n)
+# why: I check all characters in the string if input is nested
+# space complexity: O(n)
+# why: I have half the input as stack frames if input is nested
+
+
 # PROBLEM 2: How Many 1s
 # UNDERSTAND
 # 1. Share 2 questions you would ask to help understand the question:
@@ -84,7 +90,6 @@ def count_ones(lst):
     right = len(lst) - 1
     while left < right:
         mid = (left + right) // 2
-        print(left, right, mid)
         if left == right:
             return len(lst) - mid
         if lst[mid] == 0:
@@ -100,6 +105,11 @@ def count_ones(lst):
     else:
         return -1
 
+
+# time complexity: O(logn)
+# why: we are essentially performing binary search
+# space complexity: O(1)
+# why: there is a set amount of variables and frames
 
 # PROBLEM 3: Binary Search IV
 # UNDERSTAND
@@ -146,6 +156,12 @@ def binary_search(nums, target):
     return 0 + binary_search(nums[:mid], target)
 
 
+# time complexity: O(logn)
+# why: we are dividing input in half every iteration
+# space complexity: O(logn)
+# why: everytime we divide input in half, we create a frame
+
+
 # PROBLEM 4: Count Rotations
 # UNDERSTAND
 # 1. Share 2 questions you would ask to help understand the question:
@@ -176,6 +192,11 @@ def count_rotations(nums):
         i += 1
     return 0
 
+
+# time complexity: O(n)
+# why: i am visiting almost every element once in worst case scenario
+# space complexity: O(1)
+# why: don't use any extra space to store input
 
 # PROBLEM 5: Merge Sort I
 # UNDERSTAND
@@ -214,3 +235,9 @@ def merge_sort(lst):
     left = merge_sort(lst[:mid])
     right = merge_sort(lst[mid:])
     return merge(left, right)
+
+# time complexity: O(nlogn)
+# why: every merge sort call we are dividing input in half, and for every merge
+# call we are visiting every element once
+# space complexity: O(n)
+# we store temp array of n elements to sort and merge
