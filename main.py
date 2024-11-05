@@ -89,31 +89,85 @@
 # 4. Translate the pseudocode into Python and share your final answer:
 
 
-class TreeNode:
-    def __init__(self, val, left=None, right=None):
-        self.val = val
+class TreeNode():
+    def __init__(self, key, left=None, right=None):
+        self.key = key
         self.left = left
         self.right = right
 
 
-def left_most(root):
-    if not root:
-        return None
-    if not root.left:
-        return root.val
-    return left_most(root.left)
+def print_bst(root):
+    if root:
+        print_bst(root.left)
+        print(root.key if root.key else "None", end=" ")
+        print_bst(root.right)
+
+
+def find_min(root):
+    cur = root
+    while cur.left:
+        cur = cur.left
+    return cur
+
+
+def remove_bst(root, key):
+    # Locate the node to be removed
+    if key < root.key:
+        root.left = remove_bst(root.left, key)
+    elif key > root.key:
+        root.right = remove_bst(root.right, key)
+    else:  # we are at node to remove
+        if not root.left:   # there is right child or no child
+            return root.right
+        if not root.right:    # there is left child
+            return root.left
+
+        # node has two children
+        # Find the node's inorder successor (smallest node in right subtree)
+        successor = find_min(root.right)
+        # Swap the value of the node and its inorder successor
+        successor.key, root.key = root.key, successor.key
+        # Recursively remove the successor (which now has the current node's value)
+        root.right = remove_bst(root.right, key)
+
+    return root
 
 
 def main():
-    root = TreeNode(1, TreeNode(None, TreeNode(2, TreeNode(4), TreeNode(3))), TreeNode(None, None, TreeNode(5)))
-    print(left_most(root))
+    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8)), TreeNode(15, TreeNode(13), TreeNode(16)))
+    print_bst(root)
+    print()
 
-    root = TreeNode(1, None, TreeNode(2, TreeNode(3)))
-    print(left_most(root))
+    root = remove_bst(root, 10)
+    print_bst(root)
+    print()
 
-    root = None
-    print(left_most(root))
+    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, None, TreeNode(9))),
+                    TreeNode(15, TreeNode(13), TreeNode(16)))
+    print_bst(root)
+    print()
 
+    root = remove_bst(root, 8)
+    print_bst(root)
+    print()
+
+    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, TreeNode(9), None)),
+                    TreeNode(15, TreeNode(13), TreeNode(16)))
+    print_bst(root)
+    print()
+
+    root = remove_bst(root, 8)
+    print_bst(root)
+    print()
+
+    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, None, TreeNode(9))),
+                    TreeNode(15, TreeNode(13), TreeNode(16)))
+    print_bst(root)
+    print()
+
+    root = remove_bst(root, 9)
+    print_bst(root)
+    print()
 
 if __name__ == "__main__":
     main()
