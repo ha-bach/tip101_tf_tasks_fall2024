@@ -103,71 +103,26 @@ def print_bst(root):
         print_bst(root.right)
 
 
-def find_min(root):
-    cur = root
-    while cur.left:
-        cur = cur.left
-    return cur
-
-
-def remove_bst(root, key):
-    # Locate the node to be removed
-    if key < root.key:
-        root.left = remove_bst(root.left, key)
-    elif key > root.key:
-        root.right = remove_bst(root.right, key)
-    else:  # we are at node to remove
-        if not root.left:   # there is right child or no child
-            return root.right
-        if not root.right:    # there is left child
-            return root.left
-
-        # node has two children
-        # Find the node's inorder successor (smallest node in right subtree)
-        successor = find_min(root.right)
-        # Swap the value of the node and its inorder successor
-        successor.key, root.key = root.key, successor.key
-        # Recursively remove the successor (which now has the current node's value)
-        root.right = remove_bst(root.right, key)
-
-    return root
+def inorder_successor(root, current):
+    if not root:
+        return None
+    if root.key <= current.key:
+        return inorder_successor(root.right, current)
+    if root is current:
+        return None
+    successor = inorder_successor(root.left, current)
+    if not successor:
+        return root
+    return successor
 
 
 def main():
-    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8)), TreeNode(15, TreeNode(13), TreeNode(16)))
-    print_bst(root)
-    print()
-
-    root = remove_bst(root, 10)
-    print_bst(root)
-    print()
-
-    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, None, TreeNode(9))),
-                    TreeNode(15, TreeNode(13), TreeNode(16)))
-    print_bst(root)
-    print()
-
-    root = remove_bst(root, 8)
-    print_bst(root)
-    print()
-
-    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, TreeNode(9), None)),
-                    TreeNode(15, TreeNode(13), TreeNode(16)))
-    print_bst(root)
-    print()
-
-    root = remove_bst(root, 8)
-    print_bst(root)
-    print()
-
-    root = TreeNode(10, TreeNode(5, TreeNode(1), TreeNode(8, None, TreeNode(9))),
-                    TreeNode(15, TreeNode(13), TreeNode(16)))
-    print_bst(root)
-    print()
-
-    root = remove_bst(root, 9)
-    print_bst(root)
-    print()
+    current_2 = TreeNode(6)
+    current = TreeNode(5, TreeNode(1), TreeNode(8, current_2, TreeNode(9)))
+    root = TreeNode(10, current, TreeNode(15))
+    # print_bst(root)
+    print("Inorder successor: ", inorder_successor(root, current).key)
+    print("Inorder successor: ", inorder_successor(root, current_2).key)
 
 if __name__ == "__main__":
     main()

@@ -169,6 +169,10 @@ def insert(root, key, value):
                 return root
             cur = cur.right
 
+# Time complexity: O(h)
+# Why: I traverse the height of the tree to find out where to insert
+# Space complexity: O(1)
+# Why: no data structures, only pointers
 
 # PROBLEM 4: BST Remove I
 # UNDERSTAND
@@ -243,6 +247,10 @@ def remove_bst(root, key):
 
     return root
 
+# Time complexity: O(h)
+# Why: I traverse the tree by level to find node
+# Space complexity: O(h)
+# Why: I traverse recursively, creating a stack frame each node I visit
 
 # PROBLEM 5: BST In-order Successor
 # UNDERSTAND
@@ -252,8 +260,49 @@ def remove_bst(root, key):
 
 # PLAN
 # 2. Write out in plain English what you want to do:
+# I will recursively traverse the tree to find the inorder successor
+# If root is empty, I will return None (there is no key that is bigger)
+# So first I need to narrow down the right subtree I want
+# So if my key is larger than current key, I travel to right subtree
+# If it is not, it is time to look for the inorder successor
+# in the left subtree
+# so I keep going left until I hit a leaf node
+# or if i hit the key I am looking for
+# in that case the solution would be the parent node
+# so if i hit the key I am looking for, I return None
+# and then i call the function on the left child
+# if the function returns None, I am at a leaf node,
+# i return my node
+# else i return the output of the recursive call
 
 # 3. Translate each sub-problem into pseudocode:
+# def inorder_successor(root, current):
+#   if not root:
+#       return None
+#   if root.key < current.key:
+#       return inorder_successor(root.right, current)
+#   if root is cur:
+#       return None
+#   successor = inorder_successor(root.left, current)
+#   if not successor:
+#       return root
+#   return successor
 
 # IMPLEMENT
 # 4. Translate the pseudocode into Python and share your final answer:
+def inorder_successor(root, current):
+    if not root:
+        return None
+    if root.key <= current.key:
+        return inorder_successor(root.right, current)
+    if root is current:
+        return None
+    successor = inorder_successor(root.left, current)
+    if not successor:
+        return root
+    return successor
+
+# Time complexity: O(h)
+# Why: I traverse the full height of a tree
+# Space complexity: O(h)
+# Why: Solution is recursive, I create as many stack frames as the nodes I visited
