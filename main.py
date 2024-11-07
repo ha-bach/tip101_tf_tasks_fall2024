@@ -89,9 +89,9 @@
 # 4. Translate the pseudocode into Python and share your final answer:
 
 
-class TreeNode():
-    def __init__(self, key, left=None, right=None):
-        self.key = key
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
         self.left = left
         self.right = right
 
@@ -103,26 +103,36 @@ def print_bst(root):
         print_bst(root.right)
 
 
-def inorder_successor(root, current):
+def is_symmetric_tree(left, right):
+    if not left and not right:
+        return True
+    if not left or not right:
+        return False
+    if left.val != right.val:
+        return False
+    left_tree = is_symmetric_tree(left.left, right.right)
+    right_tree = is_symmetric_tree(left.right, right.left)
+    return left_tree and right_tree
+
+
+def is_symmetric(root):
     if not root:
-        return None
-    if root.key <= current.key:
-        return inorder_successor(root.right, current)
-    if root is current:
-        return None
-    successor = inorder_successor(root.left, current)
-    if not successor:
-        return root
-    return successor
+        return True
+    return is_symmetric_tree(root.left, root.right)
 
 
 def main():
-    current_2 = TreeNode(6)
-    current = TreeNode(5, TreeNode(1), TreeNode(8, current_2, TreeNode(9)))
-    root = TreeNode(10, current, TreeNode(15))
-    # print_bst(root)
-    print("Inorder successor: ", inorder_successor(root, current).key)
-    print("Inorder successor: ", inorder_successor(root, current_2).key)
+    root = None
+    print(is_symmetric(root))
+
+    root = TreeNode(1)
+    print(is_symmetric(root))
+
+    root = TreeNode(1, TreeNode(2, TreeNode(3), TreeNode(4)), TreeNode(2, TreeNode(4), TreeNode(3)))
+    print(is_symmetric(root))
+
+    root = TreeNode(1, TreeNode(2, None, TreeNode(3)), TreeNode(2, None, TreeNode(3)))
+    print(is_symmetric(root))
 
 if __name__ == "__main__":
     main()
