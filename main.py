@@ -103,36 +103,39 @@ def print_bst(root):
         print_bst(root.right)
 
 
-def is_symmetric_tree(left, right):
-    if not left and not right:
-        return True
-    if not left or not right:
-        return False
-    if left.val != right.val:
-        return False
-    left_tree = is_symmetric_tree(left.left, right.right)
-    right_tree = is_symmetric_tree(left.right, right.left)
-    return left_tree and right_tree
-
-
-def is_symmetric(root):
+def binary_tree_paths(root):
     if not root:
-        return True
-    return is_symmetric_tree(root.left, root.right)
+        return []
+
+    val = ""
+    if root.val:
+        val += str(root.val)
+    if root.left or root.right:
+        val += "->"
+
+    if not root.left and not root.right:
+        return [val]
+
+    left_paths = []
+    right_paths = []
+    if root.left:
+        left_paths = binary_tree_paths(root.left)  # we get back a list of strings
+        for i in range(len(left_paths)):
+            left_paths[i] = val + left_paths[i]
+    if root.right:
+        right_paths = binary_tree_paths(root.right)
+        for i in range(len(right_paths)):
+            right_paths[i] = val + right_paths[i]
+    return left_paths + right_paths
 
 
 def main():
-    root = None
-    print(is_symmetric(root))
+    root = TreeNode(1, TreeNode(2, None, TreeNode(5)), TreeNode(3))
+    print(binary_tree_paths(root))
 
     root = TreeNode(1)
-    print(is_symmetric(root))
+    print(binary_tree_paths(root))
 
-    root = TreeNode(1, TreeNode(2, TreeNode(3), TreeNode(4)), TreeNode(2, TreeNode(4), TreeNode(3)))
-    print(is_symmetric(root))
-
-    root = TreeNode(1, TreeNode(2, None, TreeNode(3)), TreeNode(2, None, TreeNode(3)))
-    print(is_symmetric(root))
 
 if __name__ == "__main__":
     main()
