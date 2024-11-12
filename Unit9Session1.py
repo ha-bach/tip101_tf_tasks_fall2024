@@ -196,7 +196,8 @@ def min_diff_in_bst(root):
 # Space complexity: O(h)
 # Why: we create as many stack frame as the deepest node
 
-# PROBLEM 4
+
+# PROBLEM 4: Increasing Order Search Tree
 # UNDERSTAND
 # 1. Share 2 questions you would ask to help understand the question:
 #      What is the input of the function?
@@ -204,12 +205,58 @@ def min_diff_in_bst(root):
 
 # PLAN
 # 2. Write out in plain English what you want to do:
+# I in order traverse the node, then add them into a list
+# then i construct a new tree out of the list
+# and return the node of the new tree
 
 # 3. Translate each sub-problem into pseudocode:
+# def increasing_bst(root):
+#     nodes = []
+#
+#     def inorderTraversal(node):
+#         if node:
+#             inorderTraversal(node.left)
+#             nodes.append(node)
+#             inorderTraversal(node.right)
+#
+#     inorderTraversal(root)
+#
+#     root = TreeNode(nodes[0].val)
+#     cur = root
+#
+#     for n in nodes[1:]:
+#         cur.right = TreeNode(n.val)
+#         cur = cur.right
+#
+#     return root
 
 # IMPLEMENT
 # 4. Translate the pseudocode into Python and share your final answer:
+def increasing_bst(root):
+    nodes = []
 
+    def inorderTraversal(node):
+        if node:
+            inorderTraversal(node.left)
+            nodes.append(node)
+            inorderTraversal(node.right)
+
+    inorderTraversal(root)
+
+    root = TreeNode(nodes[0].val)
+    cur = root
+
+    for n in nodes[1:]:
+        cur.right = TreeNode(n.val)
+        cur = cur.right
+
+    return root
+
+# Time complexity: O(n)
+# Why: I visit every node in the tree once to construct a list
+#       and visit them again to make a new list
+# Space complexity: O(n)
+# Why: I make a list that stored every node in the tree
 
 # PROBLEM 5
 # UNDERSTAND

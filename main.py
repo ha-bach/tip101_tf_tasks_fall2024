@@ -95,33 +95,46 @@ class TreeNode:
         self.left = left
         self.right = right
 
+    def __str__(self):
+        return str(self.val)
+
 
 def print_bst(root):
     if root:
         print_bst(root.left)
-        print(root.key if root.key else "None", end=" ")
+        print(root.val if root.val else "None", end=" ")
         print_bst(root.right)
 
 
-def min_diff_in_bst(root):
-    def find_min_diff(node, prev, min_diff):
-        if not node:
-            return prev, min_diff
-        prev, min_diff = find_min_diff(node.left, prev, min_diff)
-        if prev:
-            min_diff = min(min_diff, node.val - prev)
-        return find_min_diff(node.right, node.val, min_diff)
+def increasing_bst(root):
+    nodes = []
 
-    _, result = find_min_diff(root, None, float('inf'))
-    return result
+    def inorderTraversal(node):
+        if node:
+            inorderTraversal(node.left)
+            nodes.append(node)
+            inorderTraversal(node.right)
+
+    inorderTraversal(root)
+
+    root = TreeNode(nodes[0].val)
+    cur = root
+
+    for n in nodes[1:]:
+        cur.right = TreeNode(n.val)
+        cur = cur.right
+
+    return root
 
 
 def main():
-    root = TreeNode(4, TreeNode(2, TreeNode(1), TreeNode(3)), TreeNode(6))
-    print(min_diff_in_bst(root))
+    root = TreeNode(5, TreeNode(1), TreeNode(7))
+    print_bst(increasing_bst(root))
+    print()
 
-    root = TreeNode(1, TreeNode(0), TreeNode(48, TreeNode(2), TreeNode(49)))
-    print(min_diff_in_bst(root))
+    root = TreeNode(5, TreeNode(3, TreeNode(2, TreeNode(1)), TreeNode(4)),
+                    TreeNode(6, None, TreeNode(8, TreeNode(7), TreeNode(9))))
+    print_bst(increasing_bst(root))
 
 
 if __name__ == "__main__":
