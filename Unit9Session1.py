@@ -139,7 +139,7 @@ def binary_tree_paths(root):
 # Why: function is recursive, we call a stack frame for every node we visit
 
 
-# PROBLEM 3
+# PROBLEM 3: Minimum Difference in BST
 # UNDERSTAND
 # 1. Share 2 questions you would ask to help understand the question:
 #      What is the input of the function?
@@ -147,12 +147,54 @@ def binary_tree_paths(root):
 
 # PLAN
 # 2. Write out in plain English what you want to do:
+# Understand
+# input: root node of binary tree
+# output: minimum difference in binary tree
+# constraints: how small can the tree be
+# edge case: one node, zero nodes - won't happen, at least two nodes
+
+# Plan
+# make an internal helper function that in order traverses the tree (so we compare the tree in ascending order),
+# compare the difference between each node, and update the min diff we found so far
+# to do this i will make an internal helper function that takes in the node, the previous inorder traversal value,
+# the current min diff
+# and return the current value and current min diff (so the upper call can calculate new diff using those values)
+# base case is if no more node, we return the current prev value and min_diff
+# else we find out if absolute difference between root's value and prev is smaller than min diff
+# call the function recursively with root = next node, prev = root's val, min diff accordingly
+
 
 # 3. Translate each sub-problem into pseudocode:
+# def min_diff_in_bst(root):
+#   def find_min_diff(root, prev, min_diff) -> prev, min_diff:
+#       if not root:
+#           return prev, min_diff
+#       prev, min_diff = find_min_diff(root.left, root.val, min_diff)
+#       if prev:
+#           min_diff = min(min_diff, root.val - prev)
+#       return find_min_diff(root.right, root.val, min_diff)
+#   _, result = find_min_diff(root, None, float('inf'))
+#   return result
+
 
 # IMPLEMENT
 # 4. Translate the pseudocode into Python and share your final answer:
+def min_diff_in_bst(root):
+    def find_min_diff(node, prev, min_diff):
+        if not node:
+            return prev, min_diff
+        prev, min_diff = find_min_diff(node.left, prev, min_diff)
+        if prev:
+            min_diff = min(min_diff, node.val - prev)
+        return find_min_diff(node.right, node.val, min_diff)
 
+    _, result = find_min_diff(root, None, float('inf'))
+    return result
+
+# Time complexity: O(n)
+# Why: we are examining every node in the tree to find difference
+# Space complexity: O(h)
+# Why: we create as many stack frame as the deepest node
 
 # PROBLEM 4
 # UNDERSTAND

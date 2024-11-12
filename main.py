@@ -103,38 +103,25 @@ def print_bst(root):
         print_bst(root.right)
 
 
-def binary_tree_paths(root):
-    if not root:
-        return []
+def min_diff_in_bst(root):
+    def find_min_diff(node, prev, min_diff):
+        if not node:
+            return prev, min_diff
+        prev, min_diff = find_min_diff(node.left, prev, min_diff)
+        if prev:
+            min_diff = min(min_diff, node.val - prev)
+        return find_min_diff(node.right, node.val, min_diff)
 
-    val = ""
-    if root.val:
-        val += str(root.val)
-    if root.left or root.right:
-        val += "->"
-
-    if not root.left and not root.right:
-        return [val]
-
-    left_paths = []
-    right_paths = []
-    if root.left:
-        left_paths = binary_tree_paths(root.left)  # we get back a list of strings
-        for i in range(len(left_paths)):
-            left_paths[i] = val + left_paths[i]
-    if root.right:
-        right_paths = binary_tree_paths(root.right)
-        for i in range(len(right_paths)):
-            right_paths[i] = val + right_paths[i]
-    return left_paths + right_paths
+    _, result = find_min_diff(root, None, float('inf'))
+    return result
 
 
 def main():
-    root = TreeNode(1, TreeNode(2, None, TreeNode(5)), TreeNode(3))
-    print(binary_tree_paths(root))
+    root = TreeNode(4, TreeNode(2, TreeNode(1), TreeNode(3)), TreeNode(6))
+    print(min_diff_in_bst(root))
 
-    root = TreeNode(1)
-    print(binary_tree_paths(root))
+    root = TreeNode(1, TreeNode(0), TreeNode(48, TreeNode(2), TreeNode(49)))
+    print(min_diff_in_bst(root))
 
 
 if __name__ == "__main__":
