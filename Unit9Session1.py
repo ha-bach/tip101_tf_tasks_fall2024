@@ -282,8 +282,63 @@ def increasing_bst(root):
 
 # PLAN
 # 2. Write out in plain English what you want to do:
+# so first i want to find the size of the entire tree via dfs
+# if size is odd i return false
+# then i traverse the tree via dfs and
+# find size of left tree
+# and find size of right tree
+# if there is a size of n / 2, we return true
+# if the helper function finishes counting the size of the entire tree
+# no subtree was found with exactly half the nodes
+# we return false
 
 # 3. Translate each sub-problem into pseudocode:
+# 1) Define a helper function `count_nodes(root)` to count the total number of nodes in the tree.
+#     a) If the current node is None, return 0.
+#     b) Recursively count nodes in the left and right subtrees and add 1 for the current node.
+# 2) Define another helper function `can_split_helper(root, total_nodes)` to check if any subtree can form half the total number of nodes.
+#     a) If the current node is None, return 0.
+#     b) Recursively count nodes in the left and right subtrees.
+#     c) If any subtree count equals half the total number of nodes, set a flag to True.
+#     d) Return the total count of nodes for the current subtree.
+# 3) In the main function `can_split(root)`, calculate the total number of nodes.
+# 4) If the total number of nodes is odd, return False.
+# 5) Use the helper function to check if the tree can be split, and return the result.
 
 # IMPLEMENT
 # 4. Translate the pseudocode into Python and share your final answer:
+class TreeNode:
+    def __init__(self, val, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
+
+
+def count_nodes(root):
+    if not root:
+        return 0
+    return 1 + count_nodes(root.left) + count_nodes(root.right)
+
+
+def can_split_helper(root, total_nodes):
+    if not root:
+        return 0
+
+    left_count = can_split_helper(root.left, total_nodes)
+    right_count = can_split_helper(root.right, total_nodes)
+
+    # If any subtree has half of the total nodes, we can split the tree
+    if left_count == total_nodes // 2 or right_count == total_nodes // 2:
+        can_split_helper.found = True
+
+    return 1 + left_count + right_count
+
+
+def can_split(root):
+    total_nodes = count_nodes(root)
+    if total_nodes % 2 != 0:
+        return False
+
+    can_split_helper.found = False
+    can_split_helper(root, total_nodes)
+    return can_split_helper.found
