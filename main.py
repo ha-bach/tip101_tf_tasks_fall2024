@@ -106,35 +106,17 @@ def print_bst(root):
         print_bst(root.right)
 
 
-def increasing_bst(root):
-    nodes = []
-
-    def inorderTraversal(node):
-        if node:
-            inorderTraversal(node.left)
-            nodes.append(node)
-            inorderTraversal(node.right)
-
-    inorderTraversal(root)
-
-    root = TreeNode(nodes[0].val)
-    cur = root
-
-    for n in nodes[1:]:
-        cur.right = TreeNode(n.val)
-        cur = cur.right
-
-    return root
+def min_depth(root):
+    if not root:
+        return 0
+    if not root.left and not root.right:
+        return 1
+    return 1 + min(min_depth(root.left), min_depth(root.right))
 
 
 def main():
-    root = TreeNode(5, TreeNode(1), TreeNode(7))
-    print_bst(increasing_bst(root))
-    print()
-
-    root = TreeNode(5, TreeNode(3, TreeNode(2, TreeNode(1)), TreeNode(4)),
-                    TreeNode(6, None, TreeNode(8, TreeNode(7), TreeNode(9))))
-    print_bst(increasing_bst(root))
+    root = TreeNode(5, TreeNode(1, TreeNode(2)), TreeNode(7))
+    print(min_depth(root))
 
 
 if __name__ == "__main__":
